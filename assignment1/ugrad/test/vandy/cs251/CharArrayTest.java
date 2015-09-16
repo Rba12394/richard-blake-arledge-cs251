@@ -1,13 +1,10 @@
 package vandy.cs251;
 
-import vandy.cs251.CharArray;
-
-import org.junit.*;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.*;
-
-import java.util.Iterator;
 
 /**
  * Test the CharArray class.
@@ -59,7 +56,7 @@ public class CharArrayTest {
         assertEquals(0, tmp_c.compareTo(tmp));
         assertFalse(tmp.capacity() == tmp_c.capacity());
 
-        tmp_c.resize (11);
+        tmp_c.resize(11);
 
         assertEquals('b', tmp_c.get(10));
 
@@ -136,7 +133,7 @@ public class CharArrayTest {
     @Test
     public void test_SetExceptionResized() {
         CharArray tmp = new CharArray(10);
-        tmp.resize (1);
+        tmp.resize(1);
         exception.expect(ArrayIndexOutOfBoundsException.class);
         tmp.set(1, 'a');
     }
@@ -144,7 +141,7 @@ public class CharArrayTest {
     @Test
     public void test_GetExceptionResized() {
         CharArray tmp = new CharArray(10);
-        tmp.resize (1);
+        tmp.resize(1);
         exception.expect(ArrayIndexOutOfBoundsException.class);
         tmp.get(1);
     }
@@ -171,24 +168,24 @@ public class CharArrayTest {
         assertEquals('a', tmp.get(0));
         assertEquals('\u0000', tmp.get(1));
 
-        tmp = new CharArray (3, 'a');
+        tmp = new CharArray(3, 'a');
         assertEquals(3, tmp.size());
         assertEquals(3, tmp.capacity());
-        tmp.set (1, 'b');
-        tmp.set (2, 'c');
-        tmp.resize (0);
+        tmp.set(1, 'b');
+        tmp.set(2, 'c');
+        tmp.resize(0);
         assertEquals(0, tmp.size());
         assertEquals(3, tmp.capacity());
-        tmp.resize (1);
+        tmp.resize(1);
         assertEquals(1, tmp.size());
         assertEquals(3, tmp.capacity());
         assertEquals('a', tmp.get(0));
-        tmp.resize (2);
+        tmp.resize(2);
         assertEquals(2, tmp.size());
         assertEquals(3, tmp.capacity());
         assertEquals('a', tmp.get(0));
         assertEquals('a', tmp.get(1));
-        tmp.resize (3);
+        tmp.resize(3);
         assertEquals(3, tmp.size());
         assertEquals(3, tmp.capacity());
         assertEquals('a', tmp.get(0));
@@ -201,14 +198,14 @@ public class CharArrayTest {
         CharArray a = new CharArray (0, 'a');
         CharArray b = new CharArray (0, 'b');
 
-        assertEquals (0, a.compareTo (b));
-        assertEquals (0, a.compareTo (a));
-        assertEquals (0, b.compareTo (b));
+        assertEquals(0, a.compareTo(b));
+        assertEquals(0, a.compareTo(a));
+        assertEquals(0, b.compareTo(b));
 
-        a.resize (1);
+        a.resize(1);
 
-        assertTrue (a.compareTo (b) != 0);
-        assertTrue (b.compareTo (a) != 0);
+        assertTrue(a.compareTo(b) != 0);
+        assertTrue(b.compareTo(a) != 0);
 
         b.resize(1);
 
