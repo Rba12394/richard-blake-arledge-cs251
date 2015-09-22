@@ -22,6 +22,7 @@ public class CharArray implements Comparable<CharArray>,
      */
     // TODO - you fill in here
     int mySize;
+    // @@ You don't need this
     int myCapacity;
 
     /**
@@ -42,6 +43,7 @@ public class CharArray implements Comparable<CharArray>,
         //setting the capacity to the original allocated size
         myCapacity = size;
         myArray = new char[mySize];
+	// @@ you don't need this
         myDefaultVal = '\u0000';
         //null char value
         Arrays.fill(myArray, myDefaultVal);
@@ -57,6 +59,7 @@ public class CharArray implements Comparable<CharArray>,
     public CharArray(int size,
                      char mDefaultvalue) {
         // TODO - you fill in here
+	// @@ Make sure to delegate to the other constructor
         mySize = size;
         myCapacity = size;
         myArray = new char[mySize];
@@ -71,9 +74,11 @@ public class CharArray implements Comparable<CharArray>,
      */
     public CharArray(CharArray s) {
         // TODO - you fill in here
+	// @@ This is inefficient - you should be using Arrays.copyOf():
         mySize = s.size();
         myCapacity = s.size();
         myArray = new char[mySize];
+	// @@ This doesn't work like you expect it to.
         s.clone();
     }
 
@@ -84,6 +89,7 @@ public class CharArray implements Comparable<CharArray>,
     @Override
     public Object clone() {
         // TODO - you fill in here (replace return null with right implementation).
+	// @@ Please just delegate to the copy constructor
         CharArray prototype = new CharArray(this.mySize);
         prototype.myCapacity = this.mySize;
         prototype.myArray = this.myArray;
@@ -123,6 +129,7 @@ public class CharArray implements Comparable<CharArray>,
      */
     public void resize(int size) {
         // TODO - you fill in here
+	// Please restructure & remove duplicate code. 
         if(size == myCapacity){
            // myArray = new char[size];
             if(size != 0){
@@ -189,6 +196,8 @@ public class CharArray implements Comparable<CharArray>,
         // TODO - you fill in here (replace return 0 with right implementation).
         int result = 0;
         // this is just the size portion here, the comparing of the characters has to be added
+	// @@ You should be comparing content first.
+	// @@ This is inefficient - just use subtraction:
         if(s.size() > mySize){
             return -1;
         }
@@ -200,10 +209,13 @@ public class CharArray implements Comparable<CharArray>,
             //theoretically the sizes are the same once they get here
             char a, b;
             for(int i = 0; i < mySize; i++){
+		// @@ This is inefficient - just use subtraction:
                 a = this.myArray[i];
                // char []temp = s.myArray;
                // b = Array.getChar(temp,i);
                 b = s.myArray[i];
+
+		// @@ Please remove they debugging print
                 System.out.println("a>>b = " + a + ">>" + b + "(i = " + i + ")");
                 if(a < b){
                     //debug
