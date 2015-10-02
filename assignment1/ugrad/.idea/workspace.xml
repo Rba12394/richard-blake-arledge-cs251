@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ce91a2ed-be84-479b-9ed9-cdc349fc4ea8" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/vandy/cs251/CharArray.java" afterPath="$PROJECT_DIR$/src/vandy/cs251/CharArray.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="ce91a2ed-be84-479b-9ed9-cdc349fc4ea8" name="Default" comment="" />
     <ignored path="Assignment 1.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -29,8 +26,8 @@
       <file leaf-file-name="CharArray.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/vandy/cs251/CharArray.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.8101265">
-              <caret line="117" column="13" selection-start-line="117" selection-start-column="13" selection-end-line="117" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.644292">
+              <caret line="189" column="40" selection-start-line="0" selection-start-column="0" selection-end-line="208" selection-end-column="1" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -172,10 +169,10 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="3827" />
+    <option name="x" value="-13" />
     <option name="y" value="-13" />
     <option name="width" value="3866" />
-    <option name="height" value="2426" />
+    <option name="height" value="2334" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -637,16 +634,16 @@
       <workItem from="1442337330422" duration="26028000" />
       <workItem from="1443744791558" duration="59000" />
       <workItem from="1443748680291" duration="62000" />
-      <workItem from="1443765587090" duration="2218000" />
+      <workItem from="1443765587090" duration="2870000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37095000" />
+    <option name="totallyTimeSpent" value="37747000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="3827" y="-13" width="3866" height="2426" extended-state="6" />
-    <editor active="true" />
+    <frame x="-13" y="-13" width="3866" height="2334" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1183,8 +1180,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/vandy/cs251/CharArray.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.8101265">
-          <caret line="117" column="13" selection-start-line="117" selection-start-column="13" selection-end-line="117" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.644292">
+          <caret line="189" column="40" selection-start-line="0" selection-start-column="0" selection-end-line="208" selection-end-column="1" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
