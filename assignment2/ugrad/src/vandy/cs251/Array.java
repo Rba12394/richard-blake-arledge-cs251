@@ -233,11 +233,11 @@ public class Array<T extends Comparable<T>>
         @Override
         public T next() {
         // TODO - you fill in here (replace null with proper return value).
-            if(hasNext() == false){
+            if(!hasNext()){
                 throw new NoSuchElementException();
             }
             lastReturned = current++;
-            return mArray[lastReturned];
+            return mArray[current];
         }
 
         /**
