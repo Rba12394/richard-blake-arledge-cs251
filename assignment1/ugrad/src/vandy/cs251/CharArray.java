@@ -1,7 +1,5 @@
 package vandy.cs251;
 
-import java.lang.reflect.Array;
-import java.lang.*;
 import java.util.Arrays;
 
 /**
@@ -15,20 +13,20 @@ public class CharArray implements Comparable<CharArray>,
      * The underlying array.
      */
     // TODO - you fill in here
-    char[] myArray;
+    private char[] mArray;
 
     /**
      * The current size of the array.
      */
     // TODO - you fill in here
-    int mySize;
-
+    int mSize;
 
     /**
      * Default value for elements in the array.
      */
     // TODO - you fill in here
-    char myDefaultVal;
+    // @@ you don't need this
+    char mDefaultVal;
 
     /**
      * Constructs an array of the given size.
@@ -37,10 +35,8 @@ public class CharArray implements Comparable<CharArray>,
      */
     public CharArray(int size) {
         // TODO - you fill in here
-        mySize = size;
-        myArray = new char[mySize];
-        //null char value
-        Arrays.fill(myArray, myDefaultVal);
+        mSize = size;
+        mArray = new char[mSize];
     }
 
     /**
@@ -53,8 +49,10 @@ public class CharArray implements Comparable<CharArray>,
     public CharArray(int size,
                      char mDefaultvalue) {
         // TODO - you fill in here
-        myArray = new char[size];
-        myDefaultVal = mDefaultvalue;
+	// @@ Make sure to delegate to the other constructor
+        this(size);
+        mDefaultVal = mDefaultvalue;
+        Arrays.fill(mArray, mDefaultVal);
     }
 
     /**
@@ -64,7 +62,10 @@ public class CharArray implements Comparable<CharArray>,
      */
     public CharArray(CharArray s) {
         // TODO - you fill in here
-        Arrays.copyOf(s.myArray, s.size());
+	// @@ This is inefficient - you should be using Arrays.copyOf():
+        mArray = Arrays.copyOf(s.mArray, s.size());
+        mSize = s.size();
+        mDefaultVal = s.mDefaultVal;
     }
 
     /**
@@ -74,9 +75,8 @@ public class CharArray implements Comparable<CharArray>,
     @Override
     public Object clone() {
         // TODO - you fill in here (replace return null with right implementation).
-        CharArray temp = new CharArray(this);
-        return temp;
-
+        // @@ Please just delegate to the copy constructor
+        return new CharArray(this);
     }
 
     /**
@@ -84,7 +84,7 @@ public class CharArray implements Comparable<CharArray>,
      */
     public int size() {
         // TODO - you fill in here (replace return 0 with right implementation).
-    	return this.mySize;
+    	return this.mSize;
     }
 
     /**
@@ -92,8 +92,7 @@ public class CharArray implements Comparable<CharArray>,
      */
     public int capacity() {
         // TODO - you fill in here (replace return 0 with right implementation).
-        int cap = this.size();
-        return cap;
+        return mArray.length;
     }
 
     /**
@@ -111,25 +110,15 @@ public class CharArray implements Comparable<CharArray>,
      */
     public void resize(int size) {
         // TODO - you fill in here
-        if(size == mySize){
-           // myArray = new char[size];
-            if(size != 0){
-                myDefaultVal = myArray[0];
+        // @@ Please restructure & remove duplicate code.
+        if (size > mSize) {
+            if (size > capacity()) {
+                mArray = Arrays.copyOf(mArray, size);
             }
-            Arrays.fill(myArray, myDefaultVal);
-            mySize = size;
+            Arrays.fill(mArray, mSize, size, mDefaultVal);
         }
-        else if(size < mySize){
-            Arrays.fill(myArray, myDefaultVal);
-            mySize = size;
-        }
-        else{
-            mySize = size;
-            char[] b = myArray;
-            myArray = new char[mySize];
-            myArray = Arrays.copyOf(b,mySize);
-            mySize = size;
-        }
+
+        mSize = size;
     }
 
     /**
@@ -141,7 +130,7 @@ public class CharArray implements Comparable<CharArray>,
     public char get(int index) {
         // TODO - you fill in here (replace return '\0' with right implementation).
         rangeCheck(index);
-        return myArray[index];
+        return mArray[index];
     }
 
     /**
@@ -154,7 +143,7 @@ public class CharArray implements Comparable<CharArray>,
     public void set(int index, char value) {
         // TODO - you fill in here
         rangeCheck(index);
-        Array.setChar(myArray,index,value);
+        mArray[index] = value;
     }
 
     /**
@@ -170,40 +159,26 @@ public class CharArray implements Comparable<CharArray>,
     @Override
     public int compareTo(CharArray s) {
         // TODO - you fill in here (replace return 0 with right implementation).
-        int result = 0;
-        char a, b;
-        // this is just the size portion here, the comparing of the characters has to be added
-        if(mySize == s.size()) {
-            for (int i = 0; i < mySize; i++) {
-                a = this.myArray[i];
-                b = s.myArray[i];
-                if (a < b) {
-                    result = 1;
-                    break;
-                } else if (a > b) {
-                    result = -1;
-                    break;
-                }
+        // @@ You should be comparing content first.
+        // @@ This is inefficient - just use subtraction:
+
+        for (int i = 0; i < Math.min(mSize, s.mSize); i++) {
+            int difference = mArray[i] - s.mArray[i];
+            if (difference != 0) {
+                return difference;
             }
-        }
-        else{
-            //attempting to loop through arrays and compare each char
-            //theoretically the sizes are the same once they get here
-            result = mySize - s.size();
-            }
-            return result;
         }
 
+        return mSize - s.mSize;
+    }
 
     /**
      * Throws an exception if the index is out of bound.
      */
     private void rangeCheck(int index) {
         // TODO - you fill in here
-        if(index > mySize-1){
+        if(index > mSize -1){
             throw new ArrayIndexOutOfBoundsException();
         }
-
     }
-
 }
