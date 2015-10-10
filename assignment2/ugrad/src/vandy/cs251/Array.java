@@ -16,6 +16,7 @@ public class Array<T extends Comparable<T>>
      * The underlying array of type T.
      */
     // TODO - you fill in here.
+    // @@ Please be consistent with your indentation
    private T[] mArray;
 
     /**
@@ -165,6 +166,7 @@ public class Array<T extends Comparable<T>>
         // TODO - you fill in here (replace null with proper return value).
         rangeCheck(index);
         mArray[index] = null;
+	// @@ Could you simplify with arraycopy?
         for(int i = 0; i < this.mSize; i++){
             if(mArray[i].equals(null)){
                 mArray[i]=mArray[i+1];
