@@ -17,7 +17,7 @@ public class Array<T extends Comparable<T>>
      */
     // TODO - you fill in here.
     // @@ Please be consistent with your indentation
-   private T[] mArray;
+    private T[] mArray;
 
     /**
      * The current size of the array.
@@ -165,13 +165,9 @@ public class Array<T extends Comparable<T>>
     public T remove(int index) {
         // TODO - you fill in here (replace null with proper return value).
         rangeCheck(index);
-        mArray[index] = null;
 	// @@ Could you simplify with arraycopy?
-        for(int i = 0; i < this.mSize; i++){
-            if(mArray[i].equals(null)){
-                mArray[i]=mArray[i+1];
-            }
-        }
+        int num = mArray.length-(index+1);
+        System.arraycopy(mArray,index+1,mArray,index,num);
         return mArray[index];
     }
 
@@ -187,7 +183,6 @@ public class Array<T extends Comparable<T>>
     @Override
     public int compareTo(Array<T> s) {
         // TODO - you fill in here (replace 0 with proper return value).
-
         for (int i = 0; i < Math.min(mSize,s.mSize); i++){
             int diff = mArray[i].compareTo(s.mArray[i]);
             if (diff != 0){
@@ -235,11 +230,11 @@ public class Array<T extends Comparable<T>>
         @Override
         public T next() {
         // TODO - you fill in here (replace null with proper return value).
-            if(!hasNext()){
-                throw new NoSuchElementException();
-            }
-            lastReturned = current++;
-            return mArray[current];
+            if(current>mArray.length) throw new NoSuchElementException();
+            T temp = mArray[current];
+            current++;
+            lastReturned = current;
+            return temp;
         }
 
         /**
