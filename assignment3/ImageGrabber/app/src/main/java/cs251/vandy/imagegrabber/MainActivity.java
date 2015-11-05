@@ -18,12 +18,15 @@ import java.net.URISyntaxException;
 
 public class MainActivity extends Activity {
     private EditText mEdit;
+    // @@ Prefix member variables with "m"
     private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // @@ Move this to right before you call downloadImage
         int permissionCheck = this.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (permissionCheck == PackageManager.PERMISSION_DENIED)
@@ -33,10 +36,14 @@ public class MainActivity extends Activity {
     }
 
     public void onDownloadClicked(View view){
+        // @@ Put the code to get the Url in a separate method
         url = mEdit.getText().toString();
+        // @@ Consider making this a Factory method in DownloadActivity
         Intent intent = new Intent(MainActivity.this, DownloadActivity.class);
+        // @@ Use a named constant instead of "url"
         intent.putExtra("url", url);
         mEdit.setText("");
+        // @@ You should call startActivityForResult here, not startActivity
         startActivity(intent);
     }
 
@@ -49,7 +56,12 @@ public class MainActivity extends Activity {
     @Override
     protected void onRestart(){
         super.onRestart();
+        // @@ Remove this println; use logging instead
         System.out.println("ON RESTART");
+
+        // @@ Why is this in onRestart? It should be called after you receive
+        // @@ a callback to onActivityResult
+        // @@ Consider using a LayoutInflater to simplify this
         TableRow newRow = new TableRow(this);
         TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
         newRow.setLayoutParams(lp);
@@ -60,6 +72,8 @@ public class MainActivity extends Activity {
         showBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // @@ You'll probably also need a line like this for your intent
+                // @@ setType("image/*");
                 Intent galleryIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(galleryIntent);
             }
