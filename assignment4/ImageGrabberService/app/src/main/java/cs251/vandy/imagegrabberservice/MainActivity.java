@@ -21,9 +21,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class MainActivity extends Activity {
+    // @@ https://google.github.io/styleguide/javaguide.html#s4.6.1-vertical-whitespace
     private EditText mEdit;
     private String mUrl;
     static final String MY_URL = "url";
+
+    // @@ Why make this static?
     public static Handler mHandler;
 
     @Override
@@ -31,15 +34,18 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mEdit = (EditText) findViewById(R.id.urlTextEdit);
-
     }
 
     public void onDownloadServiceClicked(View view) {
+        // @@ Why start an Activity and then decide which download method to use?
+        // @@ Don't start a new Activity for this
         Intent i = createIntent("service");
         startActivity(i);
     }
 
     public void onDownloadThreadClicked(View view) {
+        // @@ Why start an Activity and then decide which download method to use?
+        // @@ Don't start a new Activity for this
         Intent i = createIntent("thread");
         defineHandler();
         startActivity(i);
@@ -49,6 +55,7 @@ public class MainActivity extends Activity {
         getUrl(mEdit);
         Intent intent = new Intent(this, DownloadActivity.class);
         intent.putExtra(MY_URL, mUrl);
+        // @@ Use a named constant
         intent.putExtra("DownloadMethod", method);
         return intent;
     }

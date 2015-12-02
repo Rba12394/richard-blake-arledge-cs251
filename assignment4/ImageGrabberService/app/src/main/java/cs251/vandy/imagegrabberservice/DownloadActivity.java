@@ -29,6 +29,7 @@ public class DownloadActivity extends Activity {
         mMethod = mIntent.getStringExtra("DownloadMethod");
         String sentUrl = mIntent.getStringExtra(URL);
 
+        // @@ Why not have the BroadcastReceiver in MainActivity instead?
         IntentFilter filter = new IntentFilter(MyResponseReceiver.ACTION_RESP);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
         receiver = new MyResponseReceiver();
@@ -36,6 +37,9 @@ public class DownloadActivity extends Activity {
 
         Log.i("DownloadActivity", mMethod);
 
+        // @@ See previous comments in MainActivity. Basically, you can
+        // @@ remove the DownloadActivity class and decide which downloading method
+        // @@ to use based on which button was clicked rather than passing a string parameter
         sendToDownloader(mMethod, sentUrl);
     }
 
@@ -57,6 +61,11 @@ public class DownloadActivity extends Activity {
         if(str.equals("thread")){
             final DownloadImageHandler handlerObj = new DownloadImageHandler();
 
+            // @@ This is also a very roundabout way to do things
+            // @@ Instead of this, try creating one background thread (in MainActivity) that has
+            // @@ a Looper, associate an instance of DownloadImageHandler with that Looper, and then
+            // @@ send messages to that instance of DownloadImageHandler when you want to download
+            // @@ using a Thread.
             (new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -134,6 +143,9 @@ public class DownloadActivity extends Activity {
             mainIntent.putExtra("time", elapsed);
             mainIntent.putExtra("returned", true);
             mainIntent.putExtra(URL, address);
+
+            // @@ This is a very roundabout way of doing this
+            // @@ Why are you starting MainActivity here? Just receive the broadcast there
             startActivity(mainIntent);
             finish();
         }
