@@ -1,13 +1,17 @@
 package cs251.vandy.imagegrabberservice;
 
-
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Messenger;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,11 +23,23 @@ import android.widget.TextView;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 
 public class MainActivity extends Activity {
+    // @@ https://google.github.io/styleguide/javaguide.html#s4.6.1-vertical-whitespace
     private EditText mEdit;
     private String mUrl;
     static final String MY_URL = "url";
+    public static final String DOWNLOADMETHOD = "DownloadMethod";
+    private final String URL = "url";
+    private Bundle mResponseBundle;
+    private String mSentUrl;
+    private MyResponseReceiver receiver;
+    myThread myThread;
+
+    // Looper/thread https://www.youtube.com/watch?v=wYDJH6tDyNg
+
+    // @@ Why make this static?
     public static Handler mHandler;
 
     @Override
@@ -32,26 +48,69 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         mEdit = (EditText) findViewById(R.id.urlTextEdit);
 
+        IntentFilter filter = new IntentFilter(MyResponseReceiver.ACTION_RESP);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        receiver = new MyResponseReceiver();
+        registerReceiver(receiver, filter);
+
+
     }
 
     public void onDownloadServiceClicked(View view) {
-        Intent i = createIntent("service");
-        startActivity(i);
+        // @@ Why start an Activity and then decide which download method to use?
+        // @@ Don't start a new Activity for this
+
+        mSentUrl = mUrl;
+
+        Intent msgIntent = new Intent(this, ImageIntentService.class);
+        msgIntent.putExtra(URL, mSentUrl);
+        Log.i("MainActivity", "call made to ImageIntentService");
+
+        int permissionCheck = this.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permissionCheck == PackageManager.PERMISSION_DENIED)
+            this.requestPermissions(new String[] {android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+        startService(msgIntent);
+
     }
 
     public void onDownloadThreadClicked(View view) {
-        Intent i = createIntent("thread");
+        // @@ Why start an Activity and then decide which download method to use?
+        // @@ Don't start a new Activity for this
+
+        myThread = new myThread();
+        myThread.start();
+
+        sendMessage();
+
         defineHandler();
-        startActivity(i);
     }
 
-    private Intent createIntent(String method){
-        getUrl(mEdit);
-        Intent intent = new Intent(this, DownloadActivity.class);
-        intent.putExtra(MY_URL, mUrl);
-        intent.putExtra("DownloadMethod", method);
-        return intent;
+
+    public void sendMessage(){
+        mSentUrl = mUrl;
+        final DownloadImageHandler handlerObj = new DownloadImageHandler();
+        myThread.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.i("MainActivity", "new thread launched/inside runnable");
+                Message msg = handlerObj.obtainMessage();
+                //entered URI is added to the message
+                msg.obj = Uri.parse(mSentUrl);
+                Log.i("MainActivity/run", msg.obj.toString());
+                final Messenger messenger = new Messenger(MainActivity.mHandler);
+                msg.replyTo = messenger;
+                loadExtras(msg);
+                handlerObj.sendMessage(msg);
+            }
+        });
     }
+
+
+    private void loadExtras(Message msg){
+        msg.setData(mResponseBundle);
+    }
+
 
     private void defineHandler(){
         mHandler = new Handler(Looper.getMainLooper()){
@@ -150,6 +209,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        unregisterReceiver(receiver);
         Log.i("MainActivity", "onPause() called");
     }
 
@@ -165,7 +225,72 @@ public class MainActivity extends Activity {
     }
 
 
+    class DownloadImageHandler extends Handler {
+        private String mUrl = URL;
+        private long mStartTime,mEndTime;
+        public Handler handler;
 
+        public DownloadImageHandler(){
+            handler = new Handler();
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            Log.i("DownloadImageHandler", "handleMessage() called");
+            mUrl = msg.obj.toString();
+            Date date = new Date();
+            mStartTime = date.getTime();
+            Log.i("DownloadImgHandler:url", mUrl);
+            Uri returned = DownloadUtils.downloadImage(getApplicationContext(), Uri.parse(mUrl));
+            Log.i("DownloadImgHandler:uri", returned.toString());
+            Date date2 = new Date();
+            mEndTime = date2.getTime();
+            long calcTime = mEndTime - mStartTime;
+            mResponseBundle = new Bundle();
+            String time = String.valueOf(calcTime);
+            mResponseBundle.putString("time", time);
+            mResponseBundle.putString(URL , returned.toString());
+        }
+    }
+
+    public class MyResponseReceiver extends BroadcastReceiver {
+        public static final String ACTION_RESP = "cs251.vandy.imagegrabberservice.intent.action.MESSAGE_PROCESSED";
+
+        @Override
+        public void onReceive(Context context, Intent intent){
+            Log.i("MainActivity", "onReceive() called");
+            //pulls data from bundle
+            Bundle bundle = intent.getExtras();
+            String elapsed = bundle.getString("time");
+            String address = bundle.getString("url");
+
+            //sends data in a new intent to mainactivity for UI to be updated
+            Intent mainIntent = new Intent(MainActivity.this, ImageIntentService.class);
+            mainIntent.putExtra("time", elapsed);
+            mainIntent.putExtra("returned", true);
+            mainIntent.putExtra(URL, address);
+
+            // @@ This is a very roundabout way of doing this
+            // @@ Why are you starting MainActivity here? Just receive the broadcast there
+            startActivity(mainIntent);
+            finish();
+        }
+    }
+
+    class myThread extends Thread{
+        Handler handler;
+
+        public myThread(){
+
+        }
+
+        @Override
+        public void run(){
+            Looper.prepare();
+            handler = new DownloadImageHandler();
+            Looper.loop();
+        }
+    }
 
 }
 

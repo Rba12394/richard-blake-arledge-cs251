@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import java.util.Date;
-
-import cs251.vandy.imagegrabberservice.DownloadActivity.MyResponseReceiver;
+import cs251.vandy.imagegrabberservice.MainActivity.MyResponseReceiver;
 
 public class ImageIntentService extends IntentService{
 
@@ -20,19 +18,26 @@ public class ImageIntentService extends IntentService{
 
     @Override
     protected void onHandleIntent(Intent intent){
-        Date date = new Date();
-        mStartTime = date.getTime();
         Log.i("ImageIntentService", "onHandleIntent() called");
         String url = intent.getStringExtra("url");
         Log.i("ImageIntentService", "url string: " + url);
         Uri uri = Uri.parse(url);
         //SystemClock.sleep(15000); //15 seconds
 
+        // @@ Start the time here
+        // @@ consider using this method:
+        // @@ http://docs.oracle.com/javase/7/docs/api/java/lang/System.html#currentTimeMillis()
+
+        mStartTime = System.currentTimeMillis();
+
         Uri returned = DownloadUtils.downloadImage(this.getApplicationContext(), uri);
 
-        Date date2 = new Date();
-        mEndTime = date2.getTime();
+        mEndTime = System.currentTimeMillis();
         long calcTime = mEndTime - mStartTime;
+
+        // @@ You can use a broadcast receiver for communication, but the
+        // @@ receiver should probably be in MainActivity instead of DownloadActivity.
+        // @@ You don't need the DownloadActivity class here.
 
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction(MyResponseReceiver.ACTION_RESP);

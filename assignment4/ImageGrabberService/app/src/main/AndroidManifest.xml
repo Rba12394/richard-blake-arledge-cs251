@@ -17,9 +17,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".DownloadActivity">
-        </activity>
         <service android:name=".ImageIntentService"
             android:exported="false"/>
     </application>
