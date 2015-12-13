@@ -246,10 +246,12 @@ public class Array<T extends Comparable<T>>
          */
         @Override
         public void remove() {
+	    // ! -10 does not conform to specification
             // TODO - you fill in here
             if(lastReturned == 0){
                 throw new IllegalStateException();
             }
+	    // ! -4 delegate to outer class. 
             if(current >= 0 && current <= mArray.length){
                 mArray[current-1] = null ;
             }
