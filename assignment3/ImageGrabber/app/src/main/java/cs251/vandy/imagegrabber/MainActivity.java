@@ -102,28 +102,4 @@ public class MainActivity extends Activity {
         TableLayout ll = (TableLayout) findViewById(R.id.tablelayout1);
         ll.addView(newL);
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        System.out.println("ON RESUME");
-    }
-
-    @Override
-    protected void onPause(){
-        super.onPause();
-        System.out.println("ON PAUSE");
-    }
-
-    @Override
-    protected void onStop(){
-        super.onStop();
-        System.out.println("ON STOP");
-    }
-
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-    }
-
 }
